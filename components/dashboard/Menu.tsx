@@ -23,7 +23,7 @@ const Menu = () => {
   };
 
   return (
-    <div className="w-full flex flex-col">
+    <div className="w-full flex flex-col px-5">
       <Navbar
         className="bg-gray-100 rounded-full"
         setActiveSection={setActiveSection}
@@ -35,7 +35,7 @@ const Menu = () => {
         <p className="text-slate-400 text-sm">Showing 50 items</p>
       </div>
 
-      <div className="mt-2 w-full">{renderActiveSection()}</div>
+      <div className="remove-scrollbar mt-2 w-full h-[64vh] md:h-[50vh] overflow-y-scroll">{renderActiveSection()}</div>
     </div>
   );
 };
