@@ -43,7 +43,7 @@ export default function RootLayout({
                   <HeaderAuth />
                 </div>
               </nav>
-              <div className="flex flex-col w-full px-5">
+              <div className="flex flex-col w-full">
                 {children}
               </div>
             </div>
