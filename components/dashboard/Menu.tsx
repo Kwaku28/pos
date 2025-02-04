@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import Appetizer from "./menu/Appetizer";
 import MainCourse from "./menu/MainCourse";
-import Dessert from "./menu/dessert";
+import Desserts from "./menu/Desserts";
 
 const Menu = () => {
   const [activeSection, setActiveSection] = useState<string>("Appetizer");
@@ -16,23 +16,29 @@ const Menu = () => {
       case "MainCourse":
         return <MainCourse />;
       case "Dessert":
-        return <Dessert />;
+        return <Desserts />;
       default:
         return null;
     }
   };
 
   return (
-    <div className="w-full flex flex-col items-center">
+    <div className="w-full flex flex-col">
       <Navbar
         className="bg-gray-100 rounded-full"
         setActiveSection={setActiveSection}
         activeSection={activeSection}
       />
+
+      <div className="flex justify-between">
+        <h1 className="heading">Menu</h1>
+        <p className="text-slate-400 text-sm">Showing 50 items</p>
+      </div>
+
       <div className="mt-2 w-full">{renderActiveSection()}</div>
     </div>
   );
-}
+};
 
 function Navbar({
   className,
@@ -44,7 +50,7 @@ function Navbar({
   activeSection: string;
 }) {
   return (
-    <div className={cn("w-full mt-3 p-1", className)}>
+    <div className={cn("w-full my-3 p-1", className)}>
       <nav>
         <div className="space-x-[10%] flex justify-between w-full">
           <Button
