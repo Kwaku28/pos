@@ -119,7 +119,17 @@ export const InfiniteMovingCards = ({
                     {item.orderType}
                   </span>
                 </div>
-                <span className=" text-xs leading-[1.6] text-gray-400 font-normal">
+                <span
+                  className={cn(
+                    "text-xs leading-[1.6] w-fit text-gray-50 font-normal px-2 py-1 rounded-full",
+                    {
+                      "bg-green-800": item.status === "Ready to Serve",
+                      "bg-red-800": item.status === "Cancelled",
+                      "bg-orange-600": item.status === "Waiting",
+                      "bg-blue-600": item.status === "Completed",
+                    }
+                  )}
+                >
                   {item.status}
                 </span>
               </div>
