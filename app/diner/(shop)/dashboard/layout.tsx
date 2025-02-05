@@ -16,7 +16,7 @@ export default function RootLayout({
         {children}
       </div>
 
-      <div className="border-l p-3 hidden md:block">
+      <div className="border-l p-2 hidden md:block">
         <ProcessOrder />
       </div>
     </div>
