@@ -9,7 +9,6 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
   const [localItems, setLocalItems] = useState(
     items.map((item) => ({
       ...item,
-      image_url: item.image_url.replace(/([^:]\/)\/+/g, "$1"),
       totalItem: 0,
     }))
   );
