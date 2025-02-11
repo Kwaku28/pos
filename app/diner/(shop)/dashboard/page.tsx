@@ -1,5 +1,5 @@
-
 import Menu from "@/components/dashboard/Menu";
+import { OrderMobile } from "@/components/dashboard/ProcessOrder";
 import RecentOrders from "@/components/dashboard/RecentOrders";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -19,6 +19,9 @@ export default async function Dashboard() {
     <div className="w-full flex flex-col">
       <RecentOrders />
       <Menu />
+      <div className="md:hidden">
+        <OrderMobile />
+      </div>
     </div>
   );
 }
