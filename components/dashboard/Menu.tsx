@@ -1,22 +1,47 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "../ui/button";
 import Appetizer from "./menu/Appetizer";
 import MainCourse from "./menu/MainCourse";
 import Desserts from "./menu/Desserts";
+import { MenuItem } from "@/types";
+import { fetchMenuItems } from "@/lib/actions/menu.actions";
 
 const Menu = () => {
   const [activeSection, setActiveSection] = useState<string>("Appetizer");
+  const [appetizers, setAppetizers] = useState<MenuItem[]>([]);
+  const [mainCourses, setMainCourses] = useState<MenuItem[]>([]);
+  const [desserts, setDesserts] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  // Fetch menu items on component mount
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const items = await fetchMenuItems();
+
+      // Filter and set items for each category
+      setAppetizers(items.filter((item) => item.category === "appetizer"));
+      setMainCourses(items.filter((item) => item.category === "main_course"));
+      setDesserts(items.filter((item) => item.category === "dessert"));
+      setLoading(false);
+    };
+
+    fetchData();
+  }, []);
 
   const renderActiveSection = () => {
+    if (loading) return <p>Loading menu...</p>;
+
     switch (activeSection) {
       case "Appetizer":
-        return <Appetizer />;
+        return <Appetizer items={appetizers} />;
       case "MainCourse":
-        return <MainCourse />;
+        return <MainCourse items={mainCourses} />;
       case "Dessert":
-        return <Desserts />;
+        return <Desserts items={desserts} />;
       default:
         return null;
     }
@@ -32,10 +57,16 @@ const Menu = () => {
 
       <div className="flex justify-between">
         <h1 className="heading">Menu</h1>
-        <p className="text-slate-400 text-sm">Showing 50 items</p>
+        <p className="text-slate-400 text-sm">
+          Showing {activeSection === "Appetizer" && appetizers.length}{" "}
+          {activeSection === "MainCourse" && mainCourses.length}{" "}
+          {activeSection === "Dessert" && desserts.length} items
+        </p>
       </div>
 
-      <div className="remove-scrollbar pb-12 md:p-0 mt-2 w-full h-[64vh] md:h-[50vh] overflow-y-scroll">{renderActiveSection()}</div>
+      <div className="remove-scrollbar pb-12 md:p-0 mt-2 w-full h-[64vh] md:h-[50vh] overflow-y-scroll">
+        {renderActiveSection()}
+      </div>
     </div>
   );
 };
