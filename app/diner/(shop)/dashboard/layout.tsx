@@ -1,4 +1,5 @@
-import ProcessOrder from "@/components/dashboard/ProcessOrder";
+import { ProcessOrder } from "@/components/dashboard/ProcessOrder";
+import { OrderProvider } from "@/components/OrderContext";
 
 export const metadata = {
   title: "BB Bunch",
@@ -11,14 +12,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="md:grid md:grid-cols-4 w-full h-[89vh]">
-      <div className="md:col-span-3">
-        {children}
-      </div>
+    <OrderProvider>
+      <div className="md:grid md:grid-cols-4 w-full h-[89vh]">
+        <div className="md:col-span-3">
+          {children}
+        </div>
 
-      <div className="border-l p-2 hidden md:block">
-        <ProcessOrder />
+        <div className="border-l p-2 hidden md:block">
+          <ProcessOrder />
+        </div>
       </div>
-    </div>
+    </OrderProvider>
   );
 }
