@@ -133,7 +133,7 @@ const CreateOrder = () => {
           <div className="mb-12 md:mb-10 h-[12vh] md:h-24">
             <h2 className="heading mt-2">Order Summary</h2>
 
-            <div className="w-full h-full bg-slate-200 p-3 rounded-lg text-slate-500 flex flex-col justify-center gap-3 overflow-y-scroll remove-scrollbar text-sm">
+            <div className="w-full h-full bg-slate-200 p-3 rounded-lg text-slate-500 flex flex-col justify-center gap-1 overflow-y-scroll remove-scrollbar text-sm">
               <div className="flex justify-between">
                 <p>Subtotal</p>
                 <span>${subtotal.toFixed(2)}</span>
