@@ -2,10 +2,12 @@
 
 import { MenuItem } from "@/types";
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaCirclePlus, FaCircleMinus } from "react-icons/fa6";
+import { useOrder } from "@/components/OrderContext";
 
 const Appetizer = ({ items }: { items: MenuItem[] }) => {
+  const { items: orderItems, incrementItem, decrementItem } = useOrder();
   const [localItems, setLocalItems] = useState(
     items.map((item) => ({
       ...item,
@@ -13,22 +15,26 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
     }))
   );
 
-  const incrementItem = (index: number) => {
-    setLocalItems((prev) =>
-      prev.map((item, i) =>
-        i === index ? { ...item, totalItem: item.totalItem + 1 } : item
-      )
+  useEffect(() => {
+    setLocalItems(
+      items.map((item) => {
+        const orderItem = orderItems.find((orderItem) => orderItem.id === item.id);
+        return {
+          ...item,
+          totalItem: orderItem ? orderItem.totalItem : 0,
+        };
+      })
     );
+  }, [items, orderItems]);
+
+  const handleIncrement = (index: number) => {
+    const item = localItems[index];
+    incrementItem(item);
   };
 
-  const decrementItem = (index: number) => {
-    setLocalItems((prev) =>
-      prev.map((item, i) =>
-        i === index && item.totalItem > 0
-          ? { ...item, totalItem: item.totalItem - 1 }
-          : item
-      )
-    );
+  const handleDecrement = (index: number) => {
+    const item = localItems[index];
+    decrementItem(item.id);
   };
 
   return (
@@ -61,14 +67,14 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
             <div className="gap-5 items-center flex">
               <span
                 className="cursor-pointer"
-                onClick={() => decrementItem(index)}
+                onClick={() => handleDecrement(index)}
               >
                 <FaCircleMinus className="w-6 h-6 border-none" color="gray" />
               </span>
               <span className="text-xs">{food.totalItem}</span>
               <span
                 className="cursor-pointer"
-                onClick={() => incrementItem(index)}
+                onClick={() => handleIncrement(index)}
               >
                 <FaCirclePlus className="w-6 h-6" color="blue" />
               </span>
