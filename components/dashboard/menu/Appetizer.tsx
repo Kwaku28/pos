@@ -18,7 +18,9 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
   useEffect(() => {
     setLocalItems(
       items.map((item) => {
-        const orderItem = orderItems.find((orderItem) => orderItem.id === item.id);
+        const orderItem = orderItems.find(
+          (orderItem) => orderItem.id === item.id
+        );
         return {
           ...item,
           totalItem: orderItem ? orderItem.totalItem : 0,
@@ -44,7 +46,10 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
           key={index}
           className="flex flex-col justify-between p-2 bg-white shadow-lg rounded-md w-full md:w-full md:h-40 h-full"
         >
-          <div className="flex flex-col md:flex-row gap-2">
+          <div
+            className="flex flex-col md:flex-row gap-2 md:cursor-pointer"
+            onClick={() => handleIncrement(index)}
+          >
             <Image
               src={food.image_url}
               alt={food.name}
@@ -64,7 +69,7 @@ const Appetizer = ({ items }: { items: MenuItem[] }) => {
             <p className="text-sm font-semibold text-slate-400">
               {food.total_sold} sold
             </p>
-            <div className="gap-5 items-center flex">
+            <div className="hidden md:flex md:gap-5 md:items-center">
               <span
                 className="cursor-pointer"
                 onClick={() => handleDecrement(index)}
