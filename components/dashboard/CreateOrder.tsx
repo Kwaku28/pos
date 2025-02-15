@@ -95,7 +95,7 @@ const CreateOrder = () => {
                     alt={food.name}
                     width={100}
                     height={50}
-                    className="object-fill h-16 w-full md:w-24 rounded-md"
+                    className="object-fill h-16 w-24 rounded-md"
                   />
                   <div className="flex flex-col justify-between w-44">
                     <h2 className="text-sm font-semibold">{food.name}</h2>
