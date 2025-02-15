@@ -1,1 +1,1 @@
-export const orderType = ["Dine-in", "Takeout", "Delivery"];
+export const orderType = ["dine-in", "takeout", "delivery"];
