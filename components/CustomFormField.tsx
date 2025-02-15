@@ -17,6 +17,7 @@ interface CustomProps {
   fieldType: FormFieldType;
   name: string;
   label?: string;
+  type?: string;
   placeholder?: string;
   disabled?: boolean;
   children?: React.ReactNode;
