@@ -1,0 +1,1 @@
+export const orderType = ["Dine-in", "Takeout", "Delivery"];
