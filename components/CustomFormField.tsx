@@ -20,6 +20,7 @@ interface CustomProps {
   placeholder?: string;
   disabled?: boolean;
   children?: React.ReactNode;
+  onChange?: (value: any) => void;
 }
 
 const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
@@ -37,7 +38,7 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
             <Input
               placeholder={placeholder}
               {...field}
-              className="shad-input border-0"
+              className="h-8 border-0"
             />
           </FormControl>
         </div>
@@ -49,11 +50,11 @@ const RenderField = ({ field, props }: { field: any; props: CustomProps }) => {
         <FormControl>
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
-              <SelectTrigger className="shad-select-trigger">
-                <SelectValue placeholder={placeholder} />
+              <SelectTrigger>
+                <SelectValue placeholder={placeholder} className="h-8"/>
               </SelectTrigger>
             </FormControl>
-            <SelectContent className="shad-select-content">
+            <SelectContent>
               {props.children}
             </SelectContent>
           </Select>
