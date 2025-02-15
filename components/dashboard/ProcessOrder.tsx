@@ -32,7 +32,7 @@ export const OrderMobile = () => {
             <span className="pl-1 text-xl">${total.toFixed(2)}</span>
             <span className="text-xs mt-0.5 text-slate-400">{orderItems.length} Items</span>
           </div>
-          <Button onClick={() => setInvoiceModalOpen(true)} className="text-xl bg-black">
+          <Button onClick={() => setInvoiceModalOpen(true)} className="text-xl bg-black hover:bg-black">
             Process Invoice
           </Button>
         </div>
