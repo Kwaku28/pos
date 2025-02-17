@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,39 +13,87 @@ import { FaCircleMinus, FaCirclePlus } from "react-icons/fa6";
 import { AiOutlineDelete } from "react-icons/ai";
 import { Button } from "../ui/button";
 import { useOrder } from "@/components/OrderContext";
+import { createOrder } from "@/lib/actions/order.actions";
+import { OrderFormValidation } from "@/lib/validations";
+import { orderType } from "@/constants";
+import { Users } from "@/types";
+import { fetchUser } from "@/lib/actions/user.actions";
 
 export enum FormFieldType {
   INPUT = "input",
   SELECT = "select",
 }
 
-const orderType = ["Dine-in", "Takeout", "Delivery"];
-
-const formSchema = z.object({
-  customer_name: z.string().min(2, {
-    message: "Customer name must be at least 2 characters.",
-  }),
-  order_type: z.string().min(2, "Select an order type"),
-});
-
 const CreateOrder = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const { items: orderItems, incrementItem, decrementItem, removeItem } = useOrder();
+  const {
+    items: orderItems,
+    incrementItem,
+    decrementItem,
+    removeItem,
+  } = useOrder();
+  
+  const [user, setUser] = useState<Users | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  useEffect(() => {
+    const getUser = async () => {
+      const userData = await fetchUser();
+      setUser(userData);
+    };
+
+    getUser();
+  }, []);
+
+  const form = useForm<z.infer<typeof OrderFormValidation>>({
+    resolver: zodResolver(OrderFormValidation),
     defaultValues: {
       customer_name: "",
       order_type: "",
+      table_number: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof OrderFormValidation>) {
+    setIsLoading(true);
+
+    const subtotal = orderItems.reduce(
+      (acc, item) => acc + item.price * item.totalItem,
+      0
+    );
+    const tax = subtotal * 0.1;
+    const totalAmount = subtotal + tax;
+
+    const orderData = {
+      customer_name: values.customer_name,
+      order_type: values.order_type,
+      status: "waiting",
+      table_number: values.table_number ?? null,
+      total_amount: totalAmount,
+      user_id: user?.id ?? null,
+    };
+
+    const orderItemsData = orderItems.map((item) => ({
+      menu_item_id: item.id,
+      quantity: item.totalItem,
+      subtotal: item.price * item.totalItem,
+    }));
+
+    const order = await createOrder(orderData, orderItemsData);
+
+    if (order) {
+      router.push("/diner/orders");
+    } else {
+      console.error("Error creating order");
+    }
+
+    setIsLoading(false);
   }
 
-  const subtotal = orderItems.reduce((acc, item) => acc + item.price * item.totalItem, 0);
+  const subtotal = orderItems.reduce(
+    (acc, item) => acc + item.price * item.totalItem,
+    0
+  );
   const tax = subtotal * 0.1;
   const total = subtotal + tax;
 
@@ -67,18 +115,30 @@ const CreateOrder = () => {
             placeholder="John Doe"
           />
 
-          <CustomFormField
-            fieldType={FormFieldType.SELECT}
-            control={form.control}
-            name="order_type"
-            placeholder="Select an order type"
-          >
-            {orderType.map((type, i) => (
-              <SelectItem key={type + i} value={type}>
-                {type}
-              </SelectItem>
-            ))}
-          </CustomFormField>
+          <div className="flex gap-1">
+            <CustomFormField
+              fieldType={FormFieldType.SELECT}
+              control={form.control}
+              name="order_type"
+              placeholder="Select an order type"
+            >
+              {orderType.map((type, i) => (
+                <SelectItem key={type + i} value={type}>
+                  {type}
+                </SelectItem>
+              ))}
+            </CustomFormField>
+
+            {form.watch("order_type") === "Dine-in" && (
+              <CustomFormField
+                fieldType={FormFieldType.INPUT}
+                control={form.control}
+                name="table_number"
+                placeholder="Table Number"
+                type="number"
+              />
+            )}
+          </div>
 
           <div className="flex flex-col h-[50vh] md:h-48 w-full border-t mt-2 remove-scrollbar overflow-y-scroll">
             <section className="mt-2">
@@ -149,7 +209,9 @@ const CreateOrder = () => {
             </div>
           </div>
 
-          <Button type="submit" className="w-full bg-blue-600">Process Transaction</Button>
+          <Button type="submit" className="w-full bg-blue-600">
+            Process Transaction
+          </Button>
         </form>
       </Form>
     </>
