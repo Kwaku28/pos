@@ -10,7 +10,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Control } from "react-hook-form";
 import { Select, SelectContent, SelectTrigger, SelectValue } from "./ui/select";
-import { FormFieldType } from "./order-form";
+import { FormFieldType } from "./dashboard/CreateOrder";
+
 
 interface CustomProps {
   control: Control<any>;
