@@ -12,11 +12,10 @@ export const InfiniteMovingCards = ({
 }: {
   items: {
     orderNo: number;
-    orderType: string;
+    order_type: string;
     orderItems: number;
-    customerName: string;
+    customer_name: string;
     status: string;
-    amount: number;
   }[];
   direction?: "left" | "right";
   speed?: "fast" | "normal" | "slow";
@@ -104,7 +103,7 @@ export const InfiniteMovingCards = ({
               <div className="relative z-20 flex flex-col">
                 <div className="flex justify-between">
                   <span className="text-sm leading-[1.6] font-normal">
-                    {item.customerName}
+                    {item.customer_name}
                   </span>
                   <span className="text-xs leading-[1.6] text-gray-400 font-normal">
                     #{item.orderNo}
@@ -116,17 +115,17 @@ export const InfiniteMovingCards = ({
                   </span>
                   {" - "}
                   <span className=" text-xs leading-[1.6] text-gray-400 font-normal">
-                    {item.orderType}
+                    {item.order_type}
                   </span>
                 </div>
                 <span
                   className={cn(
-                    "text-xs leading-[1.6] w-fit text-gray-50 font-normal px-2 py-1 rounded-full",
+                    "text-xs leading-[1.6] w-fit text-gray-50 font-normal px-2 rounded-full",
                     {
-                      "bg-green-800": item.status === "Ready to Serve",
-                      "bg-red-800": item.status === "Cancelled",
-                      "bg-orange-600": item.status === "Waiting",
-                      "bg-blue-600": item.status === "Completed",
+                      "bg-green-800": item.status === "ready",
+                      "bg-red-800": item.status === "cancelled",
+                      "bg-orange-600": item.status === "waiting",
+                      "bg-blue-600": item.status === "completed",
                     }
                   )}
                 >
